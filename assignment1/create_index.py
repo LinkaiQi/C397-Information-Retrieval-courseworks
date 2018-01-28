@@ -1,13 +1,26 @@
 import sys
 from os import listdir
 from os.path import join, isfile
+
+'''
+import nltk
+nltk.download('wordnet')
+from nltk.stem import WordNetLemmatizer
+'''
 from nltk.tokenize import wordpunct_tokenize
+from nltk.stem.porter import PorterStemmer
 
 from progress import progress
 
 
-# Inverted positional index
+# inverted positional index
 positional_index = {}
+'''
+# Lemmatizer
+wnl = WordNetLemmatizer()
+'''
+# PorterStemmer
+st = PorterStemmer()
 
 def read_file(path, docID):
     loc_index = {}
@@ -17,17 +30,20 @@ def read_file(path, docID):
     f.close()
     # save local positional index to temporary dictionary "loc_index"
     for pos in range(len(tokens)):
-        token = tokens[pos]
-        if token not in loc_index:
-            loc_index[token] = []
-        loc_index[token].append(pos)
-        # if tokens not in positional_index:
-        #     positional_index[token] = {}
-    # after indexed all tokens, save them to positional index dictionary
-    for token, indexes in loc_index.items():
-        if token not in positional_index:
-            positional_index[token] = {}
-        positional_index[token][docID] = indexes
+        '''
+        # Lemmatization and Lowercasing
+        term = wnl.lemmatize(tokens[pos]).lower()
+        '''
+        # Stemming and Lowercasing
+        term = st.stem(tokens[pos]).lower()
+        if term not in loc_index:
+            loc_index[term] = []
+        loc_index[term].append(pos)
+    # after indexed all terms, save them to positional index dictionary
+    for term, indexes in loc_index.items():
+        if term not in positional_index:
+            positional_index[term] = {}
+        positional_index[term][docID] = indexes
 
 
 if __name__ == '__main__':
@@ -58,4 +74,9 @@ if __name__ == '__main__':
         progress(i, f_num)
         i += 1
 
-    print("Done!")
+    print()
+
+    # write index to file
+    for term in sorted(positional_index.keys()):
+        print(term)
+    print(len(positional_index.keys()))
