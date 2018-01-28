@@ -45,6 +45,11 @@ def read_file(path, docID):
             positional_index[term] = {}
         positional_index[term][docID] = indexes
 
+def send_stdout(msg=''):
+    # Send msg to stdout
+    sys.stdout.write('{}\n'.format(msg))
+    sys.stdout.flush()
+
 
 if __name__ == '__main__':
     # read arguments
@@ -55,28 +60,29 @@ if __name__ == '__main__':
     path = sys.argv[1]
     files = [f for f in listdir(path) if isfile(join(path, f))]
 
+    skipped_files = []
     f_num = len(files);
-    # while i < f_num:
     for i in range(f_num):
         fname = files[i]
         finfo = fname.split(sep='_', maxsplit=2)
         # filename validation
         if finfo[0] != 'doc':
-            print('Warning, incorrect format "{}"'.format(fname))
-            continue
-        try: file_id = int(finfo[1])
+            skipped_files.append(fname); continue
+        try:
+            # read file, and create indexes
+            read_file(join(path, fname), int(finfo[1]))
         except:
-            print('Warning, incorrect format "{}"'.format(fname))
-            continue
-        # read file, and create indexes
-        read_file(join(path, fname), file_id)
+            skipped_files.append(fname); continue
         # update progress bar
-        progress(i, f_num)
-        i += 1
+        progress(i+1, f_num)
 
-    print()
+    send_stdout()
+    if len(skipped_files) != 0:
+        send_stdout('Warning! Cannot index the following file(s):')
+        send_stdout('{} Skipped'.format(skipped_files))
 
     # write index to file
+    f_out = open("./index.txt", 'w')
     for term in sorted(positional_index.keys()):
-        print(term)
-    print(len(positional_index.keys()))
+        f_out.write('{term} {index}\n'.format(term=term, index=positional_index[term]))
+    f_out.close()
