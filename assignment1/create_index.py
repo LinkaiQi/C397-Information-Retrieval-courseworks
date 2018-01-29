@@ -10,7 +10,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import wordpunct_tokenize
 from nltk.stem.porter import PorterStemmer
 
-from progress import progress
+from util import INDEX_FILE, send_stdout, progress
 
 
 # inverted positional index
@@ -45,20 +45,23 @@ def read_file(path, docID):
             positional_index[term] = {}
         positional_index[term][docID] = indexes
 
-def send_stdout(msg=''):
-    # Send msg to stdout
-    sys.stdout.write('{}\n'.format(msg))
-    sys.stdout.flush()
-
 
 if __name__ == '__main__':
     # read arguments
     if len(sys.argv) != 2:
-        print("format: python3 {} [dir]".format(sys.argv[0]));
+        send_stdout("format: python {} [dir]".format(sys.argv[0]));
         sys.exit()
     # get filenames from the [dir]
-    path = sys.argv[1]
-    files = [f for f in listdir(path) if isfile(join(path, f))]
+    try:
+        path = sys.argv[1]
+        files = [f for f in listdir(path) if isfile(join(path, f))]
+    except FileNotFoundError as e:
+        send_stdout('Error! No such file or directory "{}".'.format(path))
+        sys.exit()
+    # check whether the index file already exist
+    if isfile(INDEX_FILE):
+        send_stdout('Error! Index file "{}" already exist.'.format(INDEX_FILE))
+        sys.exit()
 
     skipped_files = []
     f_num = len(files);
@@ -82,7 +85,7 @@ if __name__ == '__main__':
         send_stdout('{} Skipped'.format(skipped_files))
 
     # write index to file
-    f_out = open("./index.txt", 'w')
+    f_out = open(INDEX_FILE, 'w')
     for term in sorted(positional_index.keys()):
         f_out.write('{term} {index}\n'.format(term=term, index=positional_index[term]))
     f_out.close()
