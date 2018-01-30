@@ -1,7 +1,12 @@
 import sys
 from pyparsing import *
 
+# Index file name
 INDEX_FILE = "index.txt"
+
+# Boolean query operator
+AND = 'AND'; OR = "OR"; NOT = "NOT"
+L_BKT = '('; R_BKT = ')'
 
 
 # Send msg to stdout
