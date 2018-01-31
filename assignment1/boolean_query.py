@@ -1,4 +1,5 @@
 import sys, ast, argparse
+import copy
 from os.path import join
 
 from util import send_stdout, searchExpr, Token_Preprocessing_Engine
@@ -23,7 +24,7 @@ def validate_query(query):
     for t in query.split():
         if t.strip(L_BKT+R_BKT) in [AND, OR, NOT]: org_opt += 1
     # check parsed query
-    try: lisp_bool_query = searchExpr.parseString(args.query)[0]
+    try: lisp_bool_query = searchExpr.parseString(query)[0]
     except: return False
     for t in str(lisp_bool_query).split():
         if t.strip(L_BKT+R_BKT) in [AND, OR, NOT]: par_opt += 1
@@ -43,30 +44,35 @@ def preprocessing_query(query):
 
 # TEST CASE:
 # get_operands('dictionary love')
-# get_operands('(AND (NOT harry_potter) azkaban)')
+# get_operands('(NOT harry_potter) azkaban')
 # get_operands('(AND (NOT dictionary) (NOT love)) (AND harrypotter azkaban)')
 def get_operands(opds):
     operands = []
-    if opds[0] == L_BKT:
-        n_lbkt = 0
-        for i in range(len(opds)):
-            if opds[i] == L_BKT:
-                if n_lbkt == 0: start_i = i
-                n_lbkt += 1
-            elif opds[i] == R_BKT:
-                n_lbkt -= 1
-                if n_lbkt == 0: operands.append(opds[start_i:i+1])
-        # check unbalanced bracket
-        assert(n_lbkt == 0)
-    else:
-        operands = opds.split()
+    n_lbkt = 0; in_opd = False
+    opds = opds.strip()
+    for i in range(len(opds)):
+        if opds[i] == L_BKT:
+            if n_lbkt == 0: start_i = i
+            n_lbkt += 1
+        elif opds[i] == R_BKT:
+            n_lbkt -= 1
+            if n_lbkt == 0: operands.append(opds[start_i:i+1])
+        elif not in_opd and n_lbkt == 0 and opds[i] != ' ':
+            start_i = i
+            in_opd = True
+        elif in_opd and n_lbkt == 0 and opds[i] == ' ':
+            operands.append(opds[start_i:i])
+            in_opd = False
+    if in_opd:
+        operands.append(opds[start_i:])
+    # check unbalanced bracket
+    assert(n_lbkt == 0)
     return operands
 
 def query_valuation(query, id):
-    print("--->", query)
+    global st
     # base case (a single term or phrase)
     if query[0] != L_BKT:
-        print("  B")
         phrase = query.split('_')
         phrase = [st.process_token(token) for token in phrase]
         # a single term
@@ -80,7 +86,6 @@ def query_valuation(query, id):
     query = query[1:-1]
     opt, opds = query.split(maxsplit=1)
     sub_q = get_operands(opds);
-    print("  N", sub_q)
     if opt == AND:
         return query_valuation(sub_q[0], id) and query_valuation(sub_q[1], id)
     elif opt == OR:
@@ -149,11 +154,13 @@ def _search_pharse_func_tester(pharse, doc_id):
     result = search_pharse(terms, doc_id)
     send_stdout(result)
 
-if __name__ == '__main__':
+
+# Main function
+def main():
+    global st, documents
+
     # read arguments
     args = parse_arguments()
-    # print(args.path)
-    # print(args.query)
 
     # query validation
     if not validate_query(args.query):
@@ -180,10 +187,14 @@ if __name__ == '__main__':
     send_stdout("Pharsed Boolean Query: {}.".format(lisp_bool_query))
 
     # find document that satisfied the boolean query
+    result = []
     for doc_id in documents:
-        result = []
         if query_valuation(lisp_bool_query, doc_id):
             result.append(doc_id)
-    send_stdout("Documents: {}.".format(', '.join(str(lisp_bool_query))))
+    send_stdout("Documents: {}.".format(result))
 
     f.close()
+
+
+if __name__ == '__main__':
+    main()
