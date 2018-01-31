@@ -2,25 +2,14 @@ import sys
 from os import listdir
 from os.path import join, isfile
 
-'''
-import nltk
-nltk.download('wordnet')
-from nltk.stem import WordNetLemmatizer
-'''
 from nltk.tokenize import wordpunct_tokenize
-from nltk.stem.porter import PorterStemmer
 
-from util import INDEX_FILE, send_stdout, progress
+from util import send_stdout, progress
+from util import INDEX_FILE, Token_Preprocessing_Engine
 
 
 # inverted positional index
 positional_index = {}
-'''
-# Lemmatizer
-wnl = WordNetLemmatizer()
-'''
-# PorterStemmer
-st = PorterStemmer()
 
 def read_file(path, docID):
     loc_index = {}
@@ -30,12 +19,8 @@ def read_file(path, docID):
     f.close()
     # save local positional index to temporary dictionary "loc_index"
     for pos in range(len(tokens)):
-        '''
-        # Lemmatization and Lowercasing
-        term = wnl.lemmatize(tokens[pos]).lower()
-        '''
         # Stemming and Lowercasing
-        term = st.stem(tokens[pos]).lower()
+        term = st.process_token(tokens[pos])
         if term not in loc_index:
             loc_index[term] = []
         loc_index[term].append(pos)
@@ -63,6 +48,9 @@ if __name__ == '__main__':
         send_stdout('Error! Index file "{}" already exist.'.format(INDEX_FILE))
         sys.exit()
 
+    # initialize stemmer (Lemmatizer)
+    st = Token_Preprocessing_Engine()
+
     skipped_files = []
     f_num = len(files);
     for i in range(f_num):
@@ -74,7 +62,7 @@ if __name__ == '__main__':
         try:
             # read file, and create indexes
             read_file(join(path, fname), int(finfo[1]))
-        except:
+        except Exception as e:
             skipped_files.append(fname); continue
         # update progress bar
         progress(i+1, f_num)
@@ -82,7 +70,7 @@ if __name__ == '__main__':
     send_stdout()
     if len(skipped_files) != 0:
         send_stdout('Warning! Cannot index the following file(s):')
-        send_stdout('{} Skipped'.format(skipped_files))
+        send_stdout('{}, Skipped.'.format(skipped_files))
 
     # write index to file
     f_out = open(INDEX_FILE, 'w')
