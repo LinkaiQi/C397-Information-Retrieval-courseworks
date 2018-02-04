@@ -10,6 +10,7 @@ from util import INDEX_FILE, Token_Preprocessing_Engine
 
 # inverted positional index
 positional_index = {}
+STEMMER = False
 
 def read_file(path, docID):
     loc_index = {}
@@ -20,7 +21,10 @@ def read_file(path, docID):
     # save local positional index to temporary dictionary "loc_index"
     for pos in range(len(tokens)):
         # Stemming and Lowercasing
-        term = st.process_token(tokens[pos])
+        if STEMMER:
+            term = st.process_token(tokens[pos])
+        else:
+            term = tokens[pos].lower()
         if term not in loc_index:
             loc_index[term] = []
         loc_index[term].append(pos)
@@ -30,26 +34,28 @@ def read_file(path, docID):
             positional_index[term] = {}
         positional_index[term][docID] = indexes
 
-
-if __name__ == '__main__':
+# Main function
+def main():
+    global st
     # read arguments
     if len(sys.argv) != 2:
         send_stdout("format: python {} [dir]".format(sys.argv[0]));
-        sys.exit()
+        return
     # get filenames from the [dir]
     try:
         path = sys.argv[1]
         files = [f for f in listdir(path) if isfile(join(path, f))]
     except FileNotFoundError as e:
         send_stdout('Error! No such file or directory "{}".'.format(path))
-        sys.exit()
+        return
     # check whether the index file already exist
     if isfile(INDEX_FILE):
         send_stdout('Error! Index file "{}" already exist.'.format(INDEX_FILE))
-        sys.exit()
+        return
 
     # initialize stemmer (Lemmatizer)
-    st = Token_Preprocessing_Engine()
+    if STEMMER:
+        st = Token_Preprocessing_Engine()
 
     skipped_files = []
     f_num = len(files);
@@ -77,3 +83,7 @@ if __name__ == '__main__':
     for term in sorted(positional_index.keys()):
         f_out.write('{term} {index}\n'.format(term=term, index=positional_index[term]))
     f_out.close()
+
+
+if __name__ == '__main__':
+    main()
