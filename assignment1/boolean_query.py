@@ -1,5 +1,4 @@
 import sys, ast, argparse
-import copy
 from os.path import join
 
 from util import send_stdout, searchExpr, Token_Preprocessing_Engine
@@ -174,8 +173,13 @@ def main():
     except FileNotFoundError as e:
         send_stdout('Error! Index file "{}" does not exits.'.format(path))
         sys.exit()
+    
     # read index
-    read_index(f)
+    try:
+        read_index(f)
+    except:
+        send_stdout('Error! Invalided index file format.')
+        sys.exit()
 
     # initialize query stemmer (Lemmatizer)
     st = Token_Preprocessing_Engine()
