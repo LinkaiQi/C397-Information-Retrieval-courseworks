@@ -59,5 +59,6 @@ class TestCreateIndex(unittest.TestCase):
         s = cout.getvalue()
         self.assertTrue('already exist' in s)
 
+
 if __name__ == '__main__':
     unittest.main()
