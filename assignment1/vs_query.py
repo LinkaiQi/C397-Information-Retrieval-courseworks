@@ -96,8 +96,11 @@ def main():
         sys.exit()
 
     # initialize query stemmer (Lemmatizer)
-    st = Token_Preprocessing_Engine()
-    query = [st.process_token(t) for t in args.terms]
+    if STEMMER:
+        st = Token_Preprocessing_Engine()
+        query = [st.process_token(t) for t in args.terms]
+    else:
+        query = [t.lower() for t in args.terms]
 
     # read index
     try:

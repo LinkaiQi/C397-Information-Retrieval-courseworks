@@ -2,7 +2,7 @@ import sys, ast, argparse
 from os.path import join
 
 from util import send_stdout, searchExpr, Token_Preprocessing_Engine
-from util import INDEX_FILE, AND, OR, NOT, L_BKT, R_BKT, QUOTE
+from util import INDEX_FILE, STEMMER, AND, OR, NOT, L_BKT, R_BKT, QUOTE
 
 
 # inverted positional index
@@ -73,7 +73,10 @@ def query_valuation(query, id):
     # base case (a single term or phrase)
     if query[0] != L_BKT:
         phrase = query.split('_')
-        phrase = [st.process_token(token) for token in phrase]
+        if STEMMER:
+            phrase = [st.process_token(token) for token in phrase]
+        else:
+            phrase = [token.lower() for token in phrase]
         # a single term
         if len(phrase) == 1:
             return search_term(phrase[0], id)
@@ -173,7 +176,7 @@ def main():
     except FileNotFoundError as e:
         send_stdout('Error! Index file "{}" does not exits.'.format(path))
         sys.exit()
-    
+
     # read index
     try:
         read_index(f)
@@ -182,7 +185,8 @@ def main():
         sys.exit()
 
     # initialize query stemmer (Lemmatizer)
-    st = Token_Preprocessing_Engine()
+    if STEMMER:
+        st = Token_Preprocessing_Engine()
 
     # query preprocessing
     p_query = preprocessing_query(args.query)
