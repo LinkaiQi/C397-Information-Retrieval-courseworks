@@ -8,6 +8,7 @@ from nltk.stem import WordNetLemmatizer
 
 # Index file name
 INDEX_FILE = "index.txt"
+ZONE_INDEX_FILE = "zone_index.txt"
 
 # Use stemmer
 STEMMER = False
