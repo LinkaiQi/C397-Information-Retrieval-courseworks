@@ -9,6 +9,8 @@ from nltk.stem import WordNetLemmatizer
 # Index file name
 INDEX_FILE = "index.txt"
 
+# Use stemmer
+STEMMER = False
 # Choose stemmer between the 'Wordnet (Lemmatizer)' and the 'Porter'
 USE_LEMMATIZER = True
 

@@ -5,12 +5,11 @@ from os.path import join, isfile
 from nltk.tokenize import wordpunct_tokenize
 
 from util import send_stdout, progress
-from util import INDEX_FILE, Token_Preprocessing_Engine
+from util import INDEX_FILE, STEMMER, Token_Preprocessing_Engine
 
 
 # inverted positional index
 positional_index = {}
-STEMMER = False
 
 def read_file(path, docID):
     loc_index = {}
