@@ -4,22 +4,22 @@
 
 ### create_index
 create_index.py will create the index file in the current execution path  
-`$python3 create_index [dir]`
+`$python3 create_index.py [dir]`
 
 ### print_index
-`$python3 print_index [directory]`
+`$python3 print_index.py [directory]`
 
 ### boolean_query
-`$python3 boolean_query [directory] [query]`
+`$python3 boolean_query.py [directory] [query]`
 
 ### vs_query
-`$python3 vs_query [index_location] [k] [score] [term1] [term2] [term3] ...`
+`$python3 vs_query.py [index_location] [k] [score] [term1] [term2] [term3] ...`
 
 ### create_zone_index
-`$python3 create_zone_index [doc_dir] [index_dir] ...`
+`$python3 create_zone_index.py [doc_dir] [index_dir] ...`
 
 ### zone_scorer
-`$python3 zone_scorer [index dir] [k] [g] [q]`
+`$python3 zone_scorer.py [index dir] [k] [g] [q]`
 
 ## collaborations and websites/resources
 Boolean query parser (Parsing simple string and generating lisp)
