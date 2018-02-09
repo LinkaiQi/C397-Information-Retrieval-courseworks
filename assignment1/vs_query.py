@@ -2,7 +2,7 @@ import sys, ast, argparse
 import math
 from os.path import join
 
-from util import INDEX_FILE
+from util import STEMMER, INDEX_FILE
 from util import send_stdout, progress, Token_Preprocessing_Engine
 
 

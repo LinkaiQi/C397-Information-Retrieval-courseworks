@@ -10,6 +10,7 @@ create_index.py will create the index file in the current execution path
 `$python3 print_index.py [directory]`
 
 ### boolean_query
+query should input as a single argument  
 `$python3 boolean_query.py [directory] [query]`
 
 ### vs_query
@@ -19,6 +20,7 @@ create_index.py will create the index file in the current execution path
 `$python3 create_zone_index.py [doc_dir] [index_dir] ...`
 
 ### zone_scorer
+query should input as a single argument
 `$python3 zone_scorer.py [index dir] [k] [g] [q]`
 
 ## collaborations and websites/resources
