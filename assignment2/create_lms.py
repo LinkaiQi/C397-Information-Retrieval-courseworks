@@ -7,7 +7,7 @@ from os.path import join, isfile
 from nltk.tokenize import wordpunct_tokenize
 
 from util import send_stdout, progress
-from util import LM_NAME, STEMMER, Token_Preprocessing_Engine
+from util import LM_NAME, L_TOKEN, STEMMER, Token_Preprocessing_Engine
 
 # Global variable for store the LM
 # KEY = docID, VALUE = terms_MLE
@@ -36,7 +36,7 @@ def read_file(path, docID):
             TF[term] = 0
         TF[term] += 1
 
-    TF['L_TOKEN'] = L
+    TF[L_TOKEN] = L
     # Store TF to Global variable LM with its docID
     LM_LMS[docID] = TF
 
@@ -86,7 +86,7 @@ def main():
         if not success:
             invalid_filename_docs.append(fname); continue
         try:
-            # read file, and create language model (calculate MLE)
+            # read file, and create language models (calculate MLE)
             read_file(join(DOC_DIR, fname), docID)
         except Exception as e:
             print(e)

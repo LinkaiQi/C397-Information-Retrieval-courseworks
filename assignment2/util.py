@@ -6,11 +6,12 @@ from nltk.stem.porter import PorterStemmer
 from nltk.stem import WordNetLemmatizer
 
 
-# Index file name
-LM_NAME = "LM_lms.txt"
+# language model file name
+LM_NAME = "LMS.txt"
+L_TOKEN = "L_TOKEN"
 
 # Use stemmer
-STEMMER = False
+STEMMER = True
 # Choose stemmer between the 'Wordnet (Lemmatizer)' and the 'Porter'
 USE_LEMMATIZER = True
 
