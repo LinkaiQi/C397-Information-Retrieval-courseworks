@@ -58,7 +58,7 @@ def main():
 
     # read arguments "% ./create_lms [document dir] [output_dir]"
     if len(sys.argv) != 3:
-        send_stdout("Usage: python3 {} [document dir] [output_dir]".format(sys.argv[0]));
+        send_stdout("Usage: python3 {} [document_dir] [output_dir]".format(sys.argv[0]));
         return
     # get filenames from the [document dir]
     try:

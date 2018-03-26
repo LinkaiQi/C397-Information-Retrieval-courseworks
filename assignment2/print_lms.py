@@ -31,7 +31,7 @@ def main():
     try:
         path = join(sys.argv[1], LM_NAME)
         f = open(path)
-    except FileNotFoundError as e:
+    except (FileNotFoundError, NotADirectoryError) as e:
         send_stdout('Error! Language models file does not find "{}".'.format(path))
         return
 

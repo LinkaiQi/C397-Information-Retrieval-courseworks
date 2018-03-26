@@ -64,8 +64,12 @@ def estimate_query_lh(terms):
             # calculate Pˆ(t|d) = λ * Pˆmle(t|Md) + (1 − λ) * Pˆmle(t|Mc)
             P_td = Lambda * P_tMd + (1-Lambda) * P_tMc
             # Mulitply Pˆ(t|d) in log space
-            assert P_td != 0
-            P += math.log(P_td)
+            if P_td == 0:
+                # P_td == 0 --> the term is not in the corpus
+                # Avoid log(0) --> ValueError: math domain error
+                P += -100
+            else:
+                P += math.log(P_td)
 
         Q_likelihood[docID] = math.e ** P
 
@@ -97,7 +101,7 @@ def main():
     try:
         path = join(args.LM_DIR, LM_NAME)
         f = open(path)
-    except FileNotFoundError as e:
+    except (FileNotFoundError, NotADirectoryError) as e:
         send_stdout('Error! Language models file does not find "{}".'.format(path))
         return
 
