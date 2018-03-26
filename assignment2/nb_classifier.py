@@ -191,6 +191,15 @@ def main():
     train_D = read_emails(sys.argv[1], train_files, train_index)
     test_D = read_emails(sys.argv[2], test_files, test_index)
 
+    if len(train_D) == 0:
+        send_stdout('Error! Does not find any documents(emails) files in [train_set_dir].\n'
+        '\t OR none of the index file entries match with documents(emails) in the dir.')
+        return
+    if len(test_D) == 0:
+        send_stdout('Error! Does not find any documents(emails) files in [test_set_dir].\n'
+        '\t OR none of the index file entries match with documents(emails) in the dir.')
+        return
+
     # Train multinomial in Naive Bayes
     send_stdout('Training Naive Bayes classifier ...')
     V, prior, condprob = train_multinomial_NB(train_index, train_D)
