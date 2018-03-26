@@ -7,7 +7,7 @@ Require nltk library. To install nltk, run:
 ### create_lms
 1. create_lms will create a language model for each document in the corpus.  
 2. The language model will save as **"LMS.txt"** in the **[output_dir]**.  
-3. create_lms will only read file that has format: **doc_##_??.txt**  
+3. **IMPORTANT!** create_lms will only read file that has format: **doc_##_??.txt**  
 
 Usage: `$python3 create_lms.py [document_dir] [output_dir]`
 
