@@ -66,7 +66,7 @@ def estimate_query_lh(terms):
             # Mulitply Pˆ(t|d) in log space
             assert P_td != 0
             P += math.log(P_td)
-        print(P)
+
         Q_likelihood[docID] = math.e ** P
 
     return Q_likelihood
@@ -112,7 +112,6 @@ def main():
 
     # Tokenize query and run stemmer / Lemmatizer
     query_terms = process_query(args.query)
-    print(query_terms)
 
     # Estimate query likelihood per document
     likelihood = estimate_query_lh(query_terms)
