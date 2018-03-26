@@ -89,7 +89,6 @@ def main():
             # read file, and create language models (calculate MLE)
             read_file(join(DOC_DIR, fname), docID)
         except Exception as e:
-            print(e)
             skipped_docs.append(fname); continue
         # update progress bar
         progress(i+1, f_num)
