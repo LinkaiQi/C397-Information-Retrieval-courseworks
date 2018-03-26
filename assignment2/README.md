@@ -28,10 +28,10 @@ Usage: `$python3 query_lms.py [language_models_location] [whitespace-separated m
 Usage: `$python3 nb_classifier.py [train_set_dir] [test_set_dir]`
 
 ## Library
-Used "nltk library", "wordpunct_tokenize" package.  
+Used **"nltk library", "wordpunct_tokenize"** package.  
 It is a regular-expression based tokenizer that provide efficient tokenization function
-and does not require other pre-installed module.
-Used 'nltk.corpus.stopwords' to remove stopwords from vocabulary V in training Naive Bayes classifier
+and does not require other pre-installed module.  
+Used **'nltk.corpus.stopwords'** to remove stopwords from vocabulary V in training Naive Bayes classifier.  
 
 ## collaborations and websites/resources
 Progress Bar Code Reference:  
