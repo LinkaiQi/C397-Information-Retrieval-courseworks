@@ -37,5 +37,5 @@ Used 'nltk.corpus.stopwords' to remove stopwords from vocabulary V in training N
 Progress Bar Code Reference:  
 Code reference: https://gist.github.com/vladignatyev/06860ec2040cb497f0f3
 
-## test cases for bonus marks
+## test cases
 test cases and its running instructions are in the `test` folder
