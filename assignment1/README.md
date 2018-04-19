@@ -21,7 +21,7 @@ query should input as a single argument
 ### create_zone_index
 `$python3 create_zone_index.py [doc_dir] [index_dir] ...`
 
-### zone_scorer
+### zone_scorer (This question's solution was submitted after the assignment1 due date)
 query `q` should input as a single argument  
 `g` is the score weight for 'title' zone, (1 - g) is score weight for 'body' zone  
 `$python3 zone_scorer.py [index dir] [k] [g] [q]`
